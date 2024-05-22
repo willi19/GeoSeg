@@ -6,7 +6,6 @@ from einops import rearrange, repeat
 from timm.models.layers import DropPath, to_2tuple, trunc_normal_
 import timm
 
-from ResNet import ResNet, BasicBlock, Bottleneck
 
 class ConvBNReLU(nn.Sequential):
     def __init__(self, in_channels, out_channels, kernel_size=3, dilation=1, stride=1, norm_layer=nn.BatchNorm2d, bias=False):
@@ -431,26 +430,40 @@ class UNetFormer(nn.Module):
                  ):
         super().__init__()
 
-        self.backbone = ResNet(block=Bottleneck,layers=[2,2,2,2]) 
-        encoder_channels = self.backbone.feature_info
-        #self.backbone = timm.create_model(backbone_name, features_only=True, output_stride=32,
-        #                                  out_indices=(1, 2, 3, 4), pretrained=pretrained)
-        #encoder_channels = self.backbone.feature_info.channels()
-        print(encoder_channels, "encoder_channels")
+        self.backbone = timm.create_model(backbone_name, features_only=True, output_stride=32,
+                                          out_indices=(1, 2, 3, 4), pretrained=pretrained)
+        encoder_channels = self.backbone.feature_info.channels()
 
         self.decoder = Decoder(encoder_channels, decode_channels, dropout, window_size, num_classes)
 
     def forward(self, x):
         h, w = x.size()[-2:]
         res1, res2, res3, res4 = self.backbone(x)
-        
         if self.training:
             x, ah = self.decoder(res1, res2, res3, res4, h, w)
-            return x, ah, res1, res2, res3, res4
+            return x, ah
         else:
             x = self.decoder(res1, res2, res3, res4, h, w)
             return x
-        
+
+def print_feature(model):
+    image = torch.randn((1, 3, 1024, 1024))
+    for name, module in model.named_children():
+        image = module(image)
+        print(name, image.size())
+    
 if __name__ == "__main__":
-    unet = UNetFormer()
-    print(unet)
+    backbone_name = 'swsl_resnet50'
+    backbone = timm.create_model(backbone_name, features_only=True, output_stride=32,
+                                          out_indices=(1, 2, 3, 4), pretrained=False)
+    #print(backbone_name, backbone)
+    print(backbone_name, backbone)
+    print_feature(backbone)
+    backbone_name = 'swsl_resnet18'
+    backbone = timm.create_model(backbone_name, features_only=True, output_stride=32,
+                                 out_indices=(1, 2, 3, 4), pretrained=False)
+    #print(backbone_name, backbone)
+    print(backbone_name, backbone)
+    print_feature(backbone)
+    
+    

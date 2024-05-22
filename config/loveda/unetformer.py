@@ -6,7 +6,7 @@ from catalyst.contrib.nn import Lookahead
 from catalyst import utils
 
 # training hparam
-max_epoch = 50
+max_epoch = 100
 ignore_index = len(CLASSES)
 train_batch_size = 32
 val_batch_size = 32
@@ -17,7 +17,7 @@ backbone_weight_decay = 0.01
 num_classes = len(CLASSES)
 classes = CLASSES
 
-weights_name = "unetformer-r50-512crop-ms-epoch30-rep"
+weights_name = "unetformer-res_distill"
 weights_path = "model_weights/loveda/{}".format(weights_name)
 test_weights_name = "last"
 log_name = 'loveda/{}'.format(weights_name)
