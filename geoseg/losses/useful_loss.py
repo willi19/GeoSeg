@@ -6,7 +6,7 @@ from torch import Tensor
 from .soft_ce import SoftCrossEntropyLoss
 from .joint_loss import JointLoss
 from .dice import DiceLoss
-from .distillation_loss import 
+#from .distillation_loss import 
 
 class EdgeLoss(nn.Module):
     def __init__(self, ignore_index=255, edge_factor=1.0):
