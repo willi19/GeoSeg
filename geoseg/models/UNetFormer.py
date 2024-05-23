@@ -6,7 +6,7 @@ from einops import rearrange, repeat
 from timm.models.layers import DropPath, to_2tuple, trunc_normal_
 import timm
 
-from ResNet import ResNet, BasicBlock, Bottleneck
+from .ResNet import ResNet, BasicBlock, Bottleneck
 
 class ConvBNReLU(nn.Sequential):
     def __init__(self, in_channels, out_channels, kernel_size=3, dilation=1, stride=1, norm_layer=nn.BatchNorm2d, bias=False):
@@ -431,19 +431,21 @@ class UNetFormer(nn.Module):
                  ):
         super().__init__()
 
-        self.backbone = ResNet(block=Bottleneck,layers=[2,2,2,2]) 
-        encoder_channels = self.backbone.feature_info
-        #self.backbone = timm.create_model(backbone_name, features_only=True, output_stride=32,
-        #                                  out_indices=(1, 2, 3, 4), pretrained=pretrained)
-        #encoder_channels = self.backbone.feature_info.channels()
-        print(encoder_channels, "encoder_channels")
-
+        #self.backbone = ResNet(block=BasicBlock,layers=[2,2,2,2]) 
+        #encoder_channels = self.backbone.feature_info
+        backbone_name = 'swsl_resnet18'
+        self.backbone = timm.create_model(backbone_name, features_only=True, output_stride=32,
+                                          out_indices=(1, 2, 3, 4), pretrained=pretrained)
+        encoder_channels = self.backbone.feature_info.channels()
+        #print(encoder_channels, "encoder_channels")
+        #print(self.backbone)
         self.decoder = Decoder(encoder_channels, decode_channels, dropout, window_size, num_classes)
 
     def forward(self, x):
         h, w = x.size()[-2:]
         res1, res2, res3, res4 = self.backbone(x)
         
+        print(res1.shape, res2.shape, res3.shape, res4.shape,"resnet output shape")
         if self.training:
             x, ah = self.decoder(res1, res2, res3, res4, h, w)
             return x, ah, res1, res2, res3, res4

@@ -8,8 +8,8 @@ from catalyst import utils
 # training hparam
 max_epoch = 100
 ignore_index = len(CLASSES)
-train_batch_size = 32
-val_batch_size = 32
+train_batch_size = 8
+val_batch_size = 8
 lr = 6e-4
 weight_decay = 0.01
 backbone_lr = 6e-5
@@ -17,7 +17,7 @@ backbone_weight_decay = 0.01
 num_classes = len(CLASSES)
 classes = CLASSES
 
-weights_name = "unetformer-res_distill"
+weights_name = "unetformer-distill-parent"
 weights_path = "model_weights/loveda/{}".format(weights_name)
 test_weights_name = "last"
 log_name = 'loveda/{}'.format(weights_name)

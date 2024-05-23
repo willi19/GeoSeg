@@ -78,11 +78,11 @@ class UnetFormerLoss(nn.Module):
         self.distillation_loss = DistillationLoss()
 
     def forward(self, logits, labels):
-        if self.training and len(logits) == 2:
-            logit_main, logit_aux = logits
+        if self.training and len(logits) >= 2:
+            logit_main, logit_aux, _, _, _, _ = logits
             loss = self.main_loss(logit_main, labels) + 0.4 * self.aux_loss(logit_aux, labels)
-            if self.student:
-                loss += self.distillation_loss(logits[1], labels)
+            #if self.student:
+            #    loss += self.distillation_loss(logits[1], labels)
         else:
             loss = self.main_loss(logits, labels)
 
