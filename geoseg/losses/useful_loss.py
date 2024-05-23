@@ -6,7 +6,7 @@ from torch import Tensor
 from .soft_ce import SoftCrossEntropyLoss
 from .joint_loss import JointLoss
 from .dice import DiceLoss
-#from .distillation_loss import 
+from .distillation_loss import CriterionPixelWise, CriterionPairWiseforWholeFeatAfterPool
 
 class EdgeLoss(nn.Module):
     def __init__(self, ignore_index=255, edge_factor=1.0):
@@ -88,17 +88,18 @@ class UnetFormerLoss(nn.Module):
 
         return loss
 
-class DistillationLoss(nn.Module):
+class UnetFormerDistillLoss(nn.Module):
     def __init__(self, ignore_index=255):
         super().__init__()
         self.main_loss = JointLoss(SoftCrossEntropyLoss(smooth_factor=0.05, ignore_index=ignore_index),
                                    DiceLoss(smooth=0.05, ignore_index=ignore_index), 1.0, 1.0)
         self.aux_loss = SoftCrossEntropyLoss(smooth_factor=0.05, ignore_index=ignore_index)
+        self.distill_loss = JointLoss(CriterionPixelWise(), CriterionPairWiseforWholeFeatAfterPool(), 10.0, 1.0)
 
-    def forward(self, logits, labels):
+    def forward(self, logits, labels, teacher_label):
         if self.training and len(logits) == 2:
             logit_main, logit_aux = logits
-            loss = self.main_loss(logit_main, labels) + 0.4 * self.aux_loss(logit_aux, labels)
+            loss = self.main_loss(logit_main, labels) + 0.4 * self.aux_loss(logit_aux, labels) + self.distill_loss(logits, teacher_label)
         else:
             loss = self.main_loss(logits, labels)
 
