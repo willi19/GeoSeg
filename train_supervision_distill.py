@@ -36,6 +36,10 @@ class Supervision_Train(pl.LightningModule):
         self.config = config
         self.student_net = config.student_net
         self.teacher_net = config.teacher_net
+        
+        self.teacher_net.eval()
+        #load the teacher model
+        self.teacher_net.load_state_dict(torch.load('teacher_model.pth'))
 
         self.loss = config.loss
 

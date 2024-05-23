@@ -445,7 +445,7 @@ class UNetFormer(nn.Module):
         h, w = x.size()[-2:]
         res1, res2, res3, res4 = self.backbone(x)
         
-        print(res1.shape, res2.shape, res3.shape, res4.shape,"resnet output shape")
+        #print(res1.shape, res2.shape, res3.shape, res4.shape,"resnet output shape")
         if self.training:
             x, ah = self.decoder(res1, res2, res3, res4, h, w)
             return x, ah, res1, res2, res3, res4
