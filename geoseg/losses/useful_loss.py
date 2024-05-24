@@ -94,7 +94,7 @@ class UnetFormerDistillLoss(nn.Module):
         self.main_loss = JointLoss(SoftCrossEntropyLoss(smooth_factor=0.05, ignore_index=ignore_index),
                                    DiceLoss(smooth=0.05, ignore_index=ignore_index), 1.0, 1.0)
         self.aux_loss = SoftCrossEntropyLoss(smooth_factor=0.05, ignore_index=ignore_index)
-        self.distill_loss = JointLoss(CriterionPixelWise(), CriterionPairWiseforWholeFeatAfterPool(), 10.0, 1.0)
+        self.distill_loss = JointLoss(CriterionPixelWise(), CriterionPairWiseforWholeFeatAfterPool(scale=0.5,feat_ind=2), 10.0, 1.0)
 
     def forward(self, logits, labels, teacher_label):
         if self.training and len(logits) == 2:
