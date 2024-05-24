@@ -433,7 +433,7 @@ class UNetFormer(nn.Module):
 
         #self.backbone = ResNet(block=BasicBlock,layers=[2,2,2,2]) 
         #encoder_channels = self.backbone.feature_info
-        backbone_name = 'swsl_resnet18'
+        #backbone_name = 'swsl_resnet18'
         self.backbone = timm.create_model(backbone_name, features_only=True, output_stride=32,
                                           out_indices=(1, 2, 3, 4), pretrained=pretrained)
         encoder_channels = self.backbone.feature_info.channels()
