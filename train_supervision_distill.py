@@ -119,8 +119,10 @@ class Supervision_Train(pl.LightningModule):
         pre_mask = pre_mask.argmax(dim=1)
         for i in range(mask.shape[0]):
             self.metrics_val.add_batch(mask[i].cpu().numpy(), pre_mask[i].cpu().numpy())
-
-        loss_val = self.loss(prediction, mask)
+        with torch.no_grad():
+            teacher_pre = self.teacher_net(img)
+            
+        loss_val = self.loss(prediction, mask, teacher_pre)
         return {"loss_val": loss_val}
 
     def on_validation_epoch_end(self):
