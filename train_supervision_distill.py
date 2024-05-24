@@ -39,6 +39,7 @@ class Supervision_Train(pl.LightningModule):
         
         self.teacher_net.eval()
         #load the teacher model
+        print(torch.load('pretrain_weights/parent.ckpt'))
         self.teacher_net.load_state_dict(torch.load('pretrain_weights/parent.ckpt'))
 
         self.loss = config.loss
