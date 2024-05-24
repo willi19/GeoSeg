@@ -6,7 +6,6 @@ import numpy as np
 from torch.nn import functional as F
 from torch.autograd import Variable
 import scipy.ndimage as nd
-from utils.utils import sim_dis_compute
 
 class OhemCrossEntropy2d(nn.Module):
     def __init__(self, ignore_label=255, thresh=0.7, min_kept=100000, factor=8):

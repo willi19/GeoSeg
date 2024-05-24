@@ -31,7 +31,7 @@ gpus = 'auto'  # default or gpu ids:[0] or gpu nums: 2, more setting can refer t
 resume_ckpt_path = None  # whether continue training with the checkpoint, default None
 
 #  define the network
-student_net = UNetFormer(num_classes=num_classes, backbone_name='swsl_resnet50')
+student_net = UNetFormer(num_classes=num_classes, backbone_name='swsl_resnet18')
 teacher_net = UNetFormer(num_classes=num_classes, backbone_name='swsl_resnet50')
 #Discriminator_net = Discriminator()#args.preprocess_GAN_mode, args.classes_num, args.batch_size, args.imsize_for_adv, args.adv_conv_dim
 # define the loss
@@ -58,7 +58,7 @@ def train_aug(img, mask):
     return img, mask
 
 
-train_dataset = LoveDATrainDataset(transform=train_aug, data_root='data/LoveDA/Train')
+train_dataset = LoveDATrainDataset(transform=train_aug, data_root='data/LoveDA/Val')
 
 val_dataset = loveda_val_dataset
 
