@@ -39,14 +39,20 @@ class Supervision_Train(pl.LightningModule):
         
         self.teacher_net.eval()
         #load the teacher model
-        print(torch.load('pretrain_weights/parent.ckpt'))
-        self.teacher_net.load_state_dict(torch.load('pretrain_weights/parent.ckpt'))
-
+        teacher_state_dict = torch.load('pretrain_weights/parent.ckpt')['state_dict']
+        self.teacher_net.load_teacher_net(self.teacher_net, teacher_state_dict)
+        
+            
         self.loss = config.loss
 
         self.metrics_train = Evaluator(num_class=config.num_classes)
         self.metrics_val = Evaluator(num_class=config.num_classes)
 
+    def load_teacher_net(self, teacher_net, state_dict):
+        new_state_dict = {k[4:]: v for k,v in state_dict.items()}
+        self.teacher_net.load_state_dict(new_state_dict)
+
+    
     def forward(self, x):
         # only net is used in the prediction/inference
         seg_pre = self.student_net(x)
