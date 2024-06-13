@@ -17,7 +17,7 @@ backbone_weight_decay = 0.01
 num_classes = len(CLASSES)
 classes = CLASSES
 
-weights_name = "unetformer-distill-parent"
+weights_name = "resnet"
 weights_path = "model_weights/loveda/{}".format(weights_name)
 test_weights_name = "last"
 log_name = 'loveda/{}'.format(weights_name)
@@ -31,7 +31,8 @@ gpus = 'auto'  # default or gpu ids:[0] or gpu nums: 2, more setting can refer t
 resume_ckpt_path = None  # whether continue training with the checkpoint, default None
 
 #  define the network
-net = UNetFormer(num_classes=num_classes, backbone_name='swsl_resnet50')
+layers = [2, 2, 2, 2]
+net = UNetFormer(layers, num_classes=num_classes)
 
 # define the loss
 loss = UnetFormerLoss(ignore_index=ignore_index)

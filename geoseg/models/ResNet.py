@@ -124,17 +124,16 @@ class ResNet(nn.Module):
         self.conv3 = conv3x3(64, 128)
         self.bn3 = nn.BatchNorm2d(128)
         self.relu3 = nn.ReLU(inplace=False)
-        self.maxpool = nn.MaxPool2d(kernel_size=3, stride=2, padding=1)
-
+        
         self.relu = nn.ReLU(inplace=False)
-        self.maxpool = nn.MaxPool2d(kernel_size=3, stride=2, padding=1, ceil_mode=True) # change
+        self.maxpool = nn.MaxPool2d(kernel_size=2, stride=2) # change
         self.layer1 = self._make_layer(block, 64, layers[0])
         self.layer2 = self._make_layer(block, 128, layers[1], stride=2)
-        self.layer3 = self._make_layer(block, 256, layers[2], stride=1, dilation=2)
-        self.layer4 = self._make_layer(block, 512, layers[3], stride=1, dilation=4, multi_grid=(1,1,1))
+        self.layer3 = self._make_layer(block, 256, layers[2], stride=2, dilation=2)
+        self.layer4 = self._make_layer(block, 512, layers[3], stride=2, dilation=4, multi_grid=(1,1,1))
     
     
-        self.feature_info = layers
+        self.feature_info = [64, 128, 256, 512]
 
         
     def _make_layer(self, block, planes, blocks, stride=1, dilation=1, multi_grid=1):
@@ -163,7 +162,7 @@ class ResNet(nn.Module):
         x2 = self.layer2(x1)
         x3 = self.layer3(x2)
         x4 = self.layer4(x3)
-        return [x4, x3, x2, x1]
+        return [x1, x2, x3, x4]
 
 
 if __name__ == '__main__':

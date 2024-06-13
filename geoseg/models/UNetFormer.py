@@ -422,21 +422,20 @@ class Decoder_shrink(nn.Module):
                     
 class UNetFormer(nn.Module):
     def __init__(self,
+                 layers,
                  decode_channels=64,
                  dropout=0.1,
-                 backbone_name='swsl_resnet18',
-                 pretrained=True,
                  window_size=8,
                  num_classes=6
                  ):
         super().__init__()
 
-        #self.backbone = ResNet(block=BasicBlock,layers=[2,2,2,2]) 
-        #encoder_channels = self.backbone.feature_info
+        self.backbone = ResNet(block=BasicBlock,layers=layers) 
+        encoder_channels = self.backbone.feature_info
         #backbone_name = 'swsl_resnet18'
-        self.backbone = timm.create_model(backbone_name, features_only=True, output_stride=32,
-                                          out_indices=(1, 2, 3, 4), pretrained=pretrained)
-        encoder_channels = self.backbone.feature_info.channels()
+        #self.backbone = timm.create_model(backbone_name, features_only=True, output_stride=32,
+        #                                  out_indices=(1, 2, 3, 4), pretrained=True)
+        #encoder_channels = self.backbone.feature_info.channels()
         #print(encoder_channels, "encoder_channels")
         #print(self.backbone)
         self.decoder = Decoder(encoder_channels, decode_channels, dropout, window_size, num_classes)
@@ -445,7 +444,7 @@ class UNetFormer(nn.Module):
         h, w = x.size()[-2:]
         res1, res2, res3, res4 = self.backbone(x)
         
-        #print(res1.shape, res2.shape, res3.shape, res4.shape,"resnet output shape")
+        print(res1.shape, res2.shape, res3.shape, res4.shape,"resnet output shape")
         if self.training:
             x, ah = self.decoder(res1, res2, res3, res4, h, w)
             return x, ah, res1, res2, res3, res4
