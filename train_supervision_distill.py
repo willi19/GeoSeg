@@ -39,7 +39,7 @@ class Supervision_Train(pl.LightningModule):
         
         self.teacher_net.eval()
         #load the teacher model
-        teacher_state_dict = torch.load('pretrain_weights/parent.ckpt')['state_dict']
+        teacher_state_dict = torch.load('drive/MyDrive/model_weights/loveda/resnet_real_teacher.ckpt')['state_dict']
         self.load_teacher_net(self.teacher_net, teacher_state_dict)
         
             

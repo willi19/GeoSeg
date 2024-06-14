@@ -217,11 +217,11 @@ class CriterionPixelWise(nn.Module):
 
     def forward(self, preds_S, preds_T):
         preds_T[0].detach()
-        assert preds_S[0].shape == preds_T[0].shape,'the output dim of teacher and student differ'
+        assert preds_S[0].shape == preds_T[-1].shape,'the output dim of teacher and student differ'
         N,C,W,H = preds_S[0].shape
-        softmax_pred_T = F.softmax(preds_T[0].permute(0,2,3,1).contiguous().view(-1,C), dim=1)
+        softmax_pred_T = F.softmax(preds_T[-1].permute(0,2,3,1).contiguous().view(-1,C), dim=1)
         logsoftmax = nn.LogSoftmax(dim=1)
-        loss = (torch.sum( - softmax_pred_T * logsoftmax(preds_S[0].permute(0,2,3,1).contiguous().view(-1,C))))/W/H
+        loss = (torch.sum( - softmax_pred_T * logsoftmax(preds_S[-1].permute(0,2,3,1).contiguous().view(-1,C))))/W/H
         return loss
 
 def L2(f_):

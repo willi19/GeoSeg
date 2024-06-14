@@ -17,10 +17,10 @@ backbone_weight_decay = 0.01
 num_classes = len(CLASSES)
 classes = CLASSES
 
-weights_name = "unetformer-distill"
-weights_path = "model_weights/loveda/{}".format(weights_name)
+weights_name = "resnet-distill"
+weights_path = "drive/MyDrive/model_weights/loveda/{}".format(weights_name)
 test_weights_name = "last"
-log_name = 'loveda/{}'.format(weights_name)
+log_name = 'drive/MyDriveloveda/{}'.format(weights_name)
 monitor = 'val_mIoU'
 monitor_mode = 'max'
 save_top_k = 1
@@ -31,8 +31,10 @@ gpus = 'auto'  # default or gpu ids:[0] or gpu nums: 2, more setting can refer t
 resume_ckpt_path = None  # whether continue training with the checkpoint, default None
 
 #  define the network
-student_net = UNetFormer(num_classes=num_classes, backbone_name='swsl_resnet18')
-teacher_net = UNetFormer(num_classes=num_classes, backbone_name='swsl_resnet50')
+student_layers = [2, 2, 2, 2]
+teacher_layer = [3, 4, 23, 3]
+student_net = UNetFormer(student_layers, num_classes=num_classes)
+teacher_net = UNetFormer(teacher_layer, num_classes=num_classes)
 #Discriminator_net = Discriminator()#args.preprocess_GAN_mode, args.classes_num, args.batch_size, args.imsize_for_adv, args.adv_conv_dim
 # define the loss
 loss = UnetFormerDistillLoss(ignore_index=ignore_index)
