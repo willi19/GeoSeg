@@ -120,10 +120,7 @@ class Supervision_Train(pl.LightningModule):
             pre_T = self.teacher_net(img)
         loss_val = self.loss(pre_S, mask, pre_T)
 
-        if self.config.use_aux_loss:
-            pre_mask = nn.Softmax(dim=1)(pre_S[0])
-        else:
-            pre_mask = nn.Softmax(dim=1)(pre_S)
+        pre_mask = nn.Softmax(dim=1)(pre_S)
 
         pre_mask = pre_mask.argmax(dim=1)
         
