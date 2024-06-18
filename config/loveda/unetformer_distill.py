@@ -32,7 +32,7 @@ resume_ckpt_path = None  # whether continue training with the checkpoint, defaul
 #  define the network
 student_layers = [2, 2, 2, 2]
 teacher_layer = [3, 4, 23, 3]
-log_name = 'drive/MyDriveloveda/{}'.format(weights_name+str(student_layers)+str(teacher_layer))
+log_name = 'distill_log/{}'.format(weights_name+str(student_layers)+str(teacher_layer))
 student_net = UNetFormer(student_layers, num_classes=num_classes)
 teacher_net = UNetFormer(teacher_layer, num_classes=num_classes)
 #Discriminator_net = Discriminator()#args.preprocess_GAN_mode, args.classes_num, args.batch_size, args.imsize_for_adv, args.adv_conv_dim
