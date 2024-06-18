@@ -4,7 +4,7 @@ from geoseg.datasets.loveda_dataset import *
 from geoseg.models.UNetFormer import UNetFormer
 from catalyst.contrib.nn import Lookahead
 from catalyst import utils
-from geoseg.models.sagan_models import Discriminator
+#from geoseg.models.sagan_models import Discriminator
 # training hparam
 max_epoch = 100
 ignore_index = len(CLASSES)
