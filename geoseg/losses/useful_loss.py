@@ -80,6 +80,7 @@ class UnetFormerLoss(nn.Module):
             logit_main, logit_aux, _, _, _, _ = logits
             loss = self.main_loss(logit_main, labels) + 0.4 * self.aux_loss(logit_aux, labels)
         else:
+            logit_main, _, _, _, _, _ = logits
             loss = self.main_loss(logits, labels)
 
         return loss
@@ -97,7 +98,8 @@ class UnetFormerDistillLoss(nn.Module):
             logit_main, logit_aux, _, _, _, _ = logits
             loss = self.main_loss(logit_main, labels) + 0.4 * self.aux_loss(logit_aux, labels) + self.distill_loss(logits, teacher_label)
         else:
-            loss = self.main_loss(logits, labels)
+            logit_main, _, _, _, _, _ = logits
+            loss = self.main_loss(logit_main, labels)
 
         return loss
 

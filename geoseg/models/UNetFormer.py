@@ -448,8 +448,8 @@ class UNetFormer(nn.Module):
             x, ah = self.decoder(res1, res2, res3, res4, h, w)
             return x, ah, res1, res2, res3, res4
         else:
-            x , ah = self.decoder(res1, res2, res3, res4, h, w)
-            return x, ah, res1, res2, res3, res4
+            x = self.decoder(res1, res2, res3, res4, h, w)
+            return x, res1, res2, res3, res4
         
 if __name__ == "__main__":
     unet = UNetFormer()
