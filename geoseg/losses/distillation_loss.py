@@ -256,6 +256,5 @@ class CriterionPairWiseforWholeFeatAfterPool(nn.Module):
         total_w, total_h = feat_T.shape[2], feat_T.shape[3]
         patch_w, patch_h = int(total_w*self.scale), int(total_h*self.scale)
         maxpool = nn.MaxPool2d(kernel_size=(patch_w, patch_h), stride=(patch_w, patch_h), padding=0, ceil_mode=True) # change
-        print(maxpool(feat_S).shape, maxpool(feat_T).shape)
         loss = self.criterion(maxpool(feat_S), maxpool(feat_T))
         return loss
