@@ -216,7 +216,7 @@ class CriterionPixelWise(nn.Module):
             print("disabled the reduce.")
 
     def forward(self, preds_S, preds_T):
-        print(preds_S[-1].shape, preds_T[-1].shape)
+        #print(preds_S[-1].shape, preds_T[-1].shape)
         preds_T[-1].detach()
         assert preds_S[-1].shape == preds_T[-1].shape,'the output dim of teacher and student differ'
         N,C,W,H = preds_S[-1].shape
