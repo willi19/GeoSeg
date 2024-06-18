@@ -20,7 +20,6 @@ classes = CLASSES
 weights_name = "resnet-distill"
 weights_path = "drive/MyDrive/model_weights/loveda/{}".format(weights_name)
 test_weights_name = "last"
-log_name = 'drive/MyDriveloveda/{}'.format(weights_name)
 monitor = 'val_mIoU'
 monitor_mode = 'max'
 save_top_k = 1
@@ -33,6 +32,7 @@ resume_ckpt_path = None  # whether continue training with the checkpoint, defaul
 #  define the network
 student_layers = [2, 2, 2, 2]
 teacher_layer = [3, 4, 23, 3]
+log_name = 'drive/MyDriveloveda/{}'.format(weights_name+str(student_layers)+str(teacher_layer))
 student_net = UNetFormer(student_layers, num_classes=num_classes)
 teacher_net = UNetFormer(teacher_layer, num_classes=num_classes)
 #Discriminator_net = Discriminator()#args.preprocess_GAN_mode, args.classes_num, args.batch_size, args.imsize_for_adv, args.adv_conv_dim

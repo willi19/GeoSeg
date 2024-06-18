@@ -31,7 +31,7 @@ gpus = 'auto'  # default or gpu ids:[0] or gpu nums: 2, more setting can refer t
 resume_ckpt_path = None  # whether continue training with the checkpoint, default None
 
 #  define the network
-layers = [2, 2, 2, 2]
+layers = [3, 4, 23, 3]
 net = UNetFormer(layers, num_classes=num_classes)
 
 # define the loss

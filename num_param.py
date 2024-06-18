@@ -10,7 +10,7 @@ from tools.metric import Evaluator
 from pytorch_lightning.loggers import CSVLogger
 import random
 
-config = py2cfg('GeoSeg/config/loveda/unetformer.py')
+config = py2cfg('config/loveda/unetformer.py')
 net = config.net
 
 print("GeoSeg : ", sum(p.numel() for p in net.parameters() if p.requires_grad))
