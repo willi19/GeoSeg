@@ -217,6 +217,7 @@ class CriterionPixelWise(nn.Module):
 
     def forward(self, preds_S, preds_T):
         preds_T[0].detach()
+        print(preds_S[0].shape, preds_T[0].shape)
         assert preds_S[0].shape == preds_T[-1].shape,'the output dim of teacher and student differ'
         N,C,W,H = preds_S[0].shape
         softmax_pred_T = F.softmax(preds_T[-1].permute(0,2,3,1).contiguous().view(-1,C), dim=1)
