@@ -114,15 +114,22 @@ class Supervision_Train(pl.LightningModule):
 
     def validation_step(self, batch, batch_idx):
         img, mask = batch['img'], batch['gt_semantic_seg']
-        prediction = self.forward(img)
-        pre_mask = nn.Softmax(dim=1)(prediction)
+        
+        pre_S = self.student_net(img)
+        with torch.no_grad():
+            pre_T = self.teacher_net(img)
+        loss_val = self.loss(pre_S, mask, pre_T)
+
+        if self.config.use_aux_loss:
+            pre_mask = nn.Softmax(dim=1)(pre_S[0])
+        else:
+            pre_mask = nn.Softmax(dim=1)(pre_S)
+
         pre_mask = pre_mask.argmax(dim=1)
+        
         for i in range(mask.shape[0]):
             self.metrics_val.add_batch(mask[i].cpu().numpy(), pre_mask[i].cpu().numpy())
-        with torch.no_grad():
-            teacher_pre = self.teacher_net(img)
-            
-        loss_val = self.loss(prediction, mask, teacher_pre)
+        
         return {"loss_val": loss_val}
 
     def on_validation_epoch_end(self):
