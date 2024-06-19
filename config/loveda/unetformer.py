@@ -20,7 +20,8 @@ classes = CLASSES
 weights_name = "resnet"
 weights_path = "drive/MyDrive/model_weights/loveda/{}".format(weights_name)
 test_weights_name = "last"
-log_name = 'distill_log/{}'.format(weights_name)
+layers = [3, 4, 23, 3]
+log_name = 'distill_log/{}'.format(weights_name+"_"+str(layers))
 monitor = 'val_mIoU'
 monitor_mode = 'max'
 save_top_k = 1
@@ -31,7 +32,6 @@ gpus = 'auto'  # default or gpu ids:[0] or gpu nums: 2, more setting can refer t
 resume_ckpt_path = None  # whether continue training with the checkpoint, default None
 
 #  define the network
-layers = [3, 4, 23, 3]
 net = UNetFormer(layers, num_classes=num_classes)
 
 # define the loss

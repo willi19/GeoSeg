@@ -170,7 +170,7 @@ def main():
                                           save_last=config.save_last, mode=config.monitor_mode,
                                           dirpath=config.weights_path,
                                           filename=config.weights_name)
-    logger = CSVLogger('../drive/MyDrive/', name=config.log_name)
+    logger = CSVLogger('drive/MyDrive/', name=config.log_name)
 
     model = Supervision_Train(config)
     if config.pretrained_ckpt_path:
